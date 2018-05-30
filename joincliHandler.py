@@ -26,10 +26,11 @@ def handleMessage(message):
                         'Restart daemon to continue listening'])
         sys.exit(1)
     
-    if (len(message['files']) > 0):
-        subprocess.Popen(['notify-send','Opening file on a browser'])
-        webbrowser.open_new_tab(message['files'][0])
-        return
+    if 'files' in message:
+        if (len(message['files']) > 0):
+            subprocess.Popen(['notify-send','Opening file on a browser'])
+            webbrowser.open_new_tab(message['files'][0])
+            return
     
     #Example of copying the message clipboard to system clipboard and notifying it.
     if 'clipboard' in message:

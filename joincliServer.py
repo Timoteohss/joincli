@@ -39,7 +39,12 @@ class webServer(Handler):
         self.end_headers()
     
     def do_OPTIONS(self):
-        self._set_headers()
+        self.send_response(200, "ok")
+        self.send_header('Access-Control-Allow-Credentials', 'false')
+        self.send_header('Access-Control-Allow-Origin', 'http://localhost:1820')
+        self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
+        self.send_header("Access-Control-Allow-Headers", "X-Requested-With, Content-type")
+
 
 def run(server_class=Handler, handler_class=webServer, port=PORT):
     try:

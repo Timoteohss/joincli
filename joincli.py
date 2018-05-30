@@ -6,9 +6,6 @@ import os
 import socket
 import requests
 
-from joincliSetup import register_new_device, open_local_devices
-
-
 
 def arguments():
     ap = argparse.ArgumentParser()
@@ -22,7 +19,7 @@ def arguments():
 def push_to_device(arguments,devices):
     #print(arguments)
     arguments["apikey"] = devices["apikey"]
-    arguments["deviceId"] = devices[devices["pref"]]
+    arguments["deviceId"] = devices[devices["pref"]]["deviceId"]
 
     encoded = []
     for key, value in arguments.items():
@@ -49,4 +46,4 @@ def devices():
     return deviceData
 
 
-#push_to_device(arguments(),devices())
+push_to_device(arguments(),devices())
