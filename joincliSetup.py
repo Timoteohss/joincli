@@ -140,6 +140,12 @@ def register_new_device(device):
     reg["deviceName"] = name
     reg["regId"] = ip_external
     reg["regId2"] = ip_local
+    #1 is Android
+    #3 is Chrome
+    #4 is Windows
+    #6 is Firefox
+    #12 is IFFT
+    #13 is node-red
     reg["deviceType"] = "13"
 
     print("Sending request...")    
@@ -151,13 +157,13 @@ def register_new_device(device):
         raise(e)
     
     #TODO handle device already registered
-    #print(response["errorMessage"])
+    print(response["errorMessage"])
 
     update_devices(device)
     
 
-#setup_devices(arguments(),open_local_devices())
-register_new_device(open_local_devices())
+setup_devices(arguments(),open_local_devices())
+#register_new_device(open_local_devices())
     
     
     

@@ -19,7 +19,7 @@ def try_decode_UTF8(data):
     except Exception as e:
         raise(e)
 
-class S(Handler):
+class webServer(Handler):
     def _set_headers(self):
         self.send_response(200)
         self.send_header('Content-type', 'text/json')
@@ -41,16 +41,18 @@ class S(Handler):
     def do_OPTIONS(self):
         self._set_headers()
 
-def run(server_class=Handler, handler_class=S, port=PORT):
+def run(server_class=Handler, handler_class=webServer, port=PORT):
     try:
         logging.info("Listening on port %d for clients..." % port)
         server_address = ('',port)
         httpd = socketserver.TCPServer(server_address,handler_class)
         httpd.serve_forever()
     except KeyboardInterrupt:
+        handleMessage(False)
         httpd.server_close()
         logger.info("Server terminated.")
     except Exception as e:
+        handleMessage(False)
         logger.error(str(e), exc_info=True)
         exit(1)
 
