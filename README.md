@@ -22,6 +22,12 @@ Hack away the funcion `handleMessage` on joincliHandler.py to do your bidding, i
 
 Not working with Chrome pushes tho, figures.
 
+Dependencies:
+```
+python3
+pyperclip (if you want the clipboard working hasslefree)
+```
+
 
 
 Pre-pre-alpha description, full on documentation "comming soon"™.
