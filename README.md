@@ -28,12 +28,12 @@ Not working with Chrome pushes tho, figures.
 
 ## Pushing:
 ```shell
-$ joincli.py [-h] [-ti] TITLE [-te] TEST [-fi] FIND [-mv] MEDIAVOLUME
+$ joincli.py [-h] [-ti] TITLE [-te] TEXT [-fi] FIND [-mv] MEDIAVOLUME
 ```
 
-It should work with any device, for now tho youre pushing only for your prefered device you chose on the setup.
+It should work with any device, for now tho youre pushing only for your prefered device you have chosen on setup.
 
-Dependencies:
+## Dependencies:
 ```
 python3
 pyperclip (if you want the clipboard working hasslefree)
