@@ -12,6 +12,10 @@ $ cd joincli
 $ python3 joincliSetup.py -ak <YOUR_API_KEY>
 $ python3 joincliSetup.py -re
 >Follow instructions, use port 1820 for now
+```
+
+## Listening for pushes:
+```shell
 $ python3 joincliServer.py
 ```
 
@@ -21,6 +25,13 @@ If you want to have it working from external (outside your LAN) sources, open th
 Hack away the funcion `handleMessage` on joincliHandler.py to do your bidding, included is a very, very crute implementation os clipboard setting and any URL opening pushed from your devices, also notifications.
 
 Not working with Chrome pushes tho, figures.
+
+## Pushing:
+```shell
+$ joincli.py [-h] [-ti] TITLE [-te] TEST [-fi] FIND [-mv] MEDIAVOLUME
+```
+
+It should work with any device, for now tho youre pushing only for your prefered device you chose on the setup.
 
 Dependencies:
 ```
