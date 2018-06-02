@@ -1,24 +1,14 @@
 import urllib.request, json, sys, os, argparse, re
 import urllib.parse, socket, requests
-
-def api_regex(s, pat=re.compile(r"\w{32}")):
-    if not pat.match(s):
-        raise argparse.ArgumentTypeError
-    return s
-
-def str2bool(arg):
-    if arg.lower() in ('yes','true','t','y','1'):
-        return True
-    if arg.lower() in ('no', 'false', 'f', 'n', '0'):
-        return False
-    else:
-        raise argparse.ArgumentTypeError('Boolean value expected!')
+import joincliUtils as ju
 
 def arguments():
     ap = argparse.ArgumentParser()
-    ap.add_argument("-ak", "--apikey", help="Your api key, get it at ...", type=api_regex)
+    ap.add_argument("-ak", "--apikey", help="Your api key, get it at ...", type=ju.api_regex)
     ap.add_argument("-up", "--update", help="Set to true so you can update your devices",
-                    type=str2bool, nargs="?", const=True, default=False)
+                    type=ju.str2bool, nargs="?", const=True, default=False)
+    ap.add_argument("-re", "--register", help="Register this device",
+                    type=ju.str2bool, nargs="?", const=True, default=False)
 
     return vars(ap.parse_args())
 
@@ -28,7 +18,7 @@ def open_remote_devices(apikey):
                                         "/registration/v1/listDevices?apikey=" +
                                         apikey).read()
         try:
-            return json.loads(decode_UTF8(devices))
+            return json.loads(ju.decode_UTF8(devices))
         except Exception as e:
             print("Bad unicode from server.")
             sys.exit(1)
@@ -41,14 +31,6 @@ def open_remote_devices(apikey):
         print("Check your connection and try again")
         sys.exit(1)
     
-def open_local_devices():
-    try:
-        with open("devices.json","r") as deviceJSON:
-            device_data_old = json.loads(deviceJSON.read())
-            return device_data_old
-    except:
-        return None
-
 def setup_devices(arguments, device):
     #If devices.json already exists
     if device is not None:
@@ -117,14 +99,6 @@ def update_devices(device):
         print("Device data updated sussesfully!")
         sys.exit(1)
 
-def decode_UTF8(data):
-    try:
-        return data.decode("utf-8")
-    except UnicodeDecodeError:
-        return False
-    except Exception as e:
-        raise(e)
-
 def register_new_device(device):
     url = "https://joinjoaomgcd.appspot.com/_ah/api/registration/v1/registerDevice/"
     headers = {'content-type': 'application/json'}
@@ -162,8 +136,27 @@ def register_new_device(device):
     update_devices(device)
     
 
-setup_devices(arguments(),open_local_devices())
-#register_new_device(open_local_devices())
-    
+
+if __name__ == "__main__":
+    import sys
+
+    arguments = arguments()
+    devices = ju.open_local_devices()
+
+    if devices is None:
+        if arguments["apikey"] is None:
+            print("No local data received and no apikey given")
+            print("Use -ak and feed me your apikey!")
+            sys.exit(1)
+        else:
+            setup_devices(arguments, devices)
+    elif arguments["update"]:
+        update_devices(devices)
+    elif arguments["register"]:
+        register_new_device(devices)
+    else:
+        print("No arguments!")
+
+       
     
     

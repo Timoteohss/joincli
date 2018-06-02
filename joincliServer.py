@@ -3,21 +3,17 @@ import socketserver
 import json
 import logging
 from joincliHandler import handleMessage
+import joincliUtils as ju
+
 
 
 logger = logging.getLogger(__name__)
 logging.basicConfig()
+devices = ju.open_local_devices()
 
 Handler = http.server.SimpleHTTPRequestHandler
 PORT = 1820
 
-def try_decode_UTF8(data):
-    try:
-        return data.decode('utf-8')
-    except UnicodeDecodeError:
-        return False
-    except Exception as e:
-        raise(e)
 
 class webServer(Handler):
     def _set_headers(self):
@@ -28,7 +24,7 @@ class webServer(Handler):
     def do_POST(self):
         self._set_headers()
         data = self.rfile.read()
-        data_str = try_decode_UTF8(data).replace("'", '"') #Get data from POST
+        data_str = ju.decode_UTF8(data).replace("'", '"') #Get data from POST
         data = json.loads(json.loads(data_str)['json'])['push'] #dict this bitch
         s = json.dumps(data, sort_keys=True, indent=4)
         print(s) #print shit to be done
@@ -61,10 +57,13 @@ def run(server_class=Handler, handler_class=webServer, port=PORT):
         logger.error(str(e), exc_info=True)
         exit(1)
 
-
-
 if __name__ == "__main__":
-    from sys import argv
+    import sys
 
-    run()
+    if devices is not None:
+        run()
+    else:
+        print("Devices not found!")
+        print("Setup your eviroment first")
+        sys.exit(1)
 
